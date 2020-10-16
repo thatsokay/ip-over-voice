@@ -1,10 +1,13 @@
-import React, {useState} from 'react'
-import {Text} from 'rebass'
+import React from 'react'
 import {Input} from '@rebass/forms'
 
-const Sender = () => {
-  const [dataUrl, setDataUrl] = useState<string | null>(null)
+import {FileData} from './types'
 
+interface Props {
+  onUpload: (file: FileData) => void
+}
+
+const Uploader: React.FC<Props> = ({onUpload}) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader()
     const files = event.target.files
@@ -22,17 +25,12 @@ const Sender = () => {
       if (typeof result !== 'string') {
         return
       }
-      setDataUrl(result)
+      onUpload({mimeType: selectedFile.type, data: result})
     }
     reader.readAsDataURL(selectedFile)
   }
 
-  return (
-    <>
-      <Input type="file" onChange={handleFileChange} />
-      <Text fontFamily="monospace">{dataUrl}</Text>
-    </>
-  )
+  return <Input type="file" onChange={handleFileChange} />
 }
 
-export default Sender
+export default Uploader
