@@ -25,7 +25,10 @@ const Uploader: React.FC<Props> = ({onUpload}) => {
       if (typeof result !== 'string') {
         return
       }
-      onUpload({mimeType: selectedFile.type, data: result})
+      onUpload({
+        mimeType: selectedFile.type,
+        data: result.slice(result.indexOf(',') + 1),
+      })
     }
     reader.readAsDataURL(selectedFile)
   }
