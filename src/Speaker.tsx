@@ -1,6 +1,8 @@
-import React from 'react'
+import React, {useMemo, useCallback} from 'react'
+import {Button} from 'rebass'
 
 import {FileData} from './types'
+import PGPWordList from './PGPWordList.json'
 
 const chunkEvery = (str: string, count: number) =>
   str.match(new RegExp(`.{1,${count}}`, 'g'))!.map((chunk) => chunk)
@@ -12,14 +14,22 @@ interface Props {
 }
 
 const Speaker: React.FC<Props> = ({fileData}) => {
-  const threeByteChunks = chunkEvery(fileData.data, 4)
-  return (
-    <>
-      {JSON.stringify(
-        threeByteChunks.map((chunk) => atob(chunk)).map(strToInts),
-      )}
-    </>
+  const wordData = useMemo(
+    () =>
+      chunkEvery(fileData.data, 4)
+        .map((chunk) => atob(chunk))
+        .flatMap(strToInts)
+        .map((byte) => PGPWordList[byte]![0]!),
+    [fileData.data],
   )
+  const speak = useCallback(
+    () =>
+      wordData.forEach((word) =>
+        speechSynthesis.speak(new SpeechSynthesisUtterance(word)),
+      ),
+    [wordData],
+  )
+  return <Button onClick={speak}>Speak</Button>
 }
 
 export default Speaker

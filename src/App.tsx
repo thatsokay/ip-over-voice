@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {ThemeProvider} from 'emotion-theming'
-import {Button, Heading} from 'rebass'
+import {Heading} from 'rebass'
 
 import Uploader from './Uploader'
 import Speaker from './Speaker'
@@ -13,13 +13,6 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Heading>IP over Voice</Heading>
-      <Button
-        onClick={() =>
-          speechSynthesis.speak(new SpeechSynthesisUtterance(fileData?.data))
-        }
-      >
-        Send
-      </Button>
       <Uploader onUpload={setFileData} />
       {fileData && <Speaker fileData={fileData} />}
     </ThemeProvider>
