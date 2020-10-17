@@ -257,7 +257,7 @@ export const wordList = [
   ['Zulu', 'Yucatan'],
 ]
 
-export const wordsToBytes: Record<string, number> = {
+export const wordValues: Record<string, number> = {
   aardvark: 0,
   adroitness: 0,
   absurd: 1,

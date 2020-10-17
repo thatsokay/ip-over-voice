@@ -4,6 +4,7 @@ import {Heading} from 'rebass'
 
 import Uploader from './Uploader'
 import Sender from './Sender'
+import Receiver from './Receiver'
 import {FileData} from './types'
 
 const theme = require('@rebass/preset').default
@@ -14,6 +15,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Heading>IP over Voice</Heading>
       <Uploader onUpload={setFileData} />
+      <Receiver />
       {fileData && <Sender fileData={fileData} />}
     </ThemeProvider>
   )
