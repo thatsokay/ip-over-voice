@@ -34,6 +34,7 @@ const Sender: React.FC<Props> = ({fileData}) => {
     [fileData.data],
   )
   const speakData = useCallback(async () => {
+    stopSpeaking.current = false
     for (const word of wordData) {
       if (stopSpeaking.current) {
         break
