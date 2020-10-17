@@ -3,7 +3,7 @@ import {ThemeProvider} from 'emotion-theming'
 import {Heading} from 'rebass'
 
 import Uploader from './Uploader'
-import Speaker from './Speaker'
+import Sender from './Sender'
 import {FileData} from './types'
 
 const theme = require('@rebass/preset').default
@@ -14,7 +14,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Heading>IP over Voice</Heading>
       <Uploader onUpload={setFileData} />
-      {fileData && <Speaker fileData={fileData} />}
+      {fileData && <Sender fileData={fileData} />}
     </ThemeProvider>
   )
 }

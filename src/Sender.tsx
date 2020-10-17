@@ -2,7 +2,7 @@ import React, {useRef, useMemo, useCallback} from 'react'
 import {Button} from 'rebass'
 
 import {FileData} from './types'
-import PGPWordList from './PGPWordList.json'
+import {wordList} from './PGPWordList'
 
 /**
  * Divides a string into a list of strings, each with a number of characters
@@ -25,18 +25,31 @@ const speak = (text: string) =>
     speechSynthesis.speak(utterance)
   })
 
+const createRecognition = () => {
+  const grammar = `#JSGF V1.0; grammar word; public <word> = ${wordList.flat()} ;`
+  const recognition = new SpeechRecognition()
+  const speechRecognitionList = new SpeechGrammarList()
+  speechRecognitionList.addFromString(grammar, 1)
+  recognition.grammars = speechRecognitionList
+  recognition.continuous = false
+  recognition.lang = 'en-US'
+  recognition.interimResults = false
+  recognition.maxAlternatives = 1
+  return recognition
+}
+
 interface Props {
   fileData: FileData
 }
 
-const Speaker: React.FC<Props> = ({fileData}) => {
+const Sender: React.FC<Props> = ({fileData}) => {
   const stopSpeaking = useRef(false)
   const wordData = useMemo(
     () =>
       chunkEvery(fileData.data, 4)
         .map((chunk) => atob(chunk))
         .flatMap(strToInts)
-        .map((byte) => PGPWordList[byte]![0]!),
+        .map((byte) => wordList[byte]![0]!),
     [fileData.data],
   )
   const speakData = useCallback(async () => {
@@ -61,4 +74,4 @@ const Speaker: React.FC<Props> = ({fileData}) => {
   )
 }
 
-export default Speaker
+export default Sender
