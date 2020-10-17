@@ -22,9 +22,8 @@ export const createRecognition = () => {
   const grammar = `#JSGF V1.0; grammar word; public <word> = ${wordList
     .flat()
     .join(' | ')} ;`
-  const recognition = new (SpeechRecognition || webkitSpeechRecognition)()
-  const speechRecognitionList = new (SpeechGrammarList ||
-    webkitSpeechGrammarList)()
+  const recognition = new SpeechRecognition()
+  const speechRecognitionList = new SpeechGrammarList()
   speechRecognitionList.addFromString(grammar, 1)
   recognition.grammars = speechRecognitionList
   recognition.continuous = false
