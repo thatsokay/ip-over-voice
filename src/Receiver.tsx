@@ -1,21 +1,24 @@
 import React, {useState, useEffect} from 'react'
 import {Button} from 'rebass'
 
-import {createRecognition} from './speech'
+import {createPGPRecognition, createAcknowledger} from './speech'
 import {wordValues} from './PGPWordList'
 
-const recognition = createRecognition()
+const recognition = createPGPRecognition()
+const {ack, nack} = createAcknowledger()
 
 const Receiver: React.FC = () => {
   const [receivedBytes, setReceivedBytes] = useState<number[]>([])
   useEffect(() => {
-    recognition.onresult = (event) => {
+    recognition.onresult = async (event) => {
       const result = event.results[0]![0]!.transcript
-      const receivedByte = wordValues[result.toLowerCase()]
+      const receivedByte = wordValues[result]
       if (receivedByte === undefined) {
+        await nack()
         return
       }
       setReceivedBytes([...receivedBytes, receivedByte])
+      await ack()
     }
   }, [receivedBytes])
   return <Button onClick={() => recognition.start()}>Receive</Button>

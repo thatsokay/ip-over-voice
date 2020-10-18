@@ -18,10 +18,10 @@ export const createSpeaker = () => {
     })
 }
 
-export const createRecognition = () => {
-  const grammar = `#JSGF V1.0; grammar word; public <word> = ${wordList
-    .flat()
-    .join(' | ')} ;`
+export const createRecognition = (words: string[]) => {
+  const grammar = `#JSGF V1.0; grammar word; public <word> = ${words.join(
+    ' | ',
+  )} ;`
   const recognition = new SpeechRecognition()
   const speechRecognitionList = new SpeechGrammarList()
   speechRecognitionList.addFromString(grammar, 1)
@@ -32,3 +32,16 @@ export const createRecognition = () => {
   recognition.maxAlternatives = 1
   return recognition
 }
+
+export const createPGPRecognition = () => createRecognition(wordList.flat())
+
+export const createAcknowledger = () => {
+  const speak = createSpeaker()
+  return {
+    ack: () => speak('yes'),
+    nack: () => speak('no'),
+  }
+}
+
+export const createAcknowledgeRecognition = () =>
+  createRecognition(['yes', 'no'])
